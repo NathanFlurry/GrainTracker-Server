@@ -61,6 +61,22 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(3000, function() {
+function getPort() {
+  var port = parseInt(process.env.PORT || '3000')
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+app.listen(getPort(), function() {
 	console.log('Listening on port 3000.');
 })
