@@ -1,12 +1,26 @@
 var mongoose = require('mongoose');
-var models = require('./models.js');
 
-module.exports = function() {
+module.exports.start = function() {
+	// Connect to the database
 	mongoose.connect('mongodb://localhost/test');
 
+	// Get the database
 	var db = mongoose.connection;
+
+	// Events
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function (callback) {
-		models()
+
+		// Get the models
+		var models = require('./models.js')();
+
+		// Mixin the models
+		for (var index in models) {
+			module.exports[index] = models[index]
+		}
 	});
+}
+
+module.exports.searchQuery = function(query) {
+	return new RegExp(query, 'i')
 }

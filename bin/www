@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
+// Get the app
 var app = require('../app.js')
+
+// Set to a dev environment
+process.env.NODE_ENV = 'development'; // 'development' or 'production'
+app.set('env', process.env.NODE_ENV)
 
 // Run the server
 function getPort() {

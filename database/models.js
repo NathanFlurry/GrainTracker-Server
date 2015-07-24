@@ -6,7 +6,6 @@ var salt = bcrypt.genSaltSync(hashCount)
 
 /* Item */
 var itemSchema = mongoose.Schema({
-	"id": Number,
 	"quantity": Number,
 	"barcode-id": Number,
 	"title": String,
@@ -17,7 +16,7 @@ var itemSchema = mongoose.Schema({
 var userSchema = mongoose.Schema({
 	"username": String,
 	"display-name": String,
-	"password": { type: String, set: function(value) { return bcrypt.hashSync(value, salt) } }
+	"password": { type: String, set: function(value) { return bcrypt.hashSync(value, salt); } }
 });
 userSchema.methods.checkPassword = function(unhashedPassword) {
 	return bcrypt.compareSync(unhashedPassword, this.password)

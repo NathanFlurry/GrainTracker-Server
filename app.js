@@ -4,8 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// var session = require('express-session')
 
-var database = require('./database/index.js')
+var db = require('./database/index.js')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -14,7 +15,7 @@ var api = require('./routes/api');
 var app = express();
 
 // Database
-database()
+db.start()
 
 // View engine
 app.set('views', path.join(__dirname, 'views'));
@@ -27,6 +28,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+/*app.use(session({
+  genid: function(req) {
+    return genuuid() // use UUIDs for session IDs
+  },
+  secret: 'some secret somethign or another'
+}));*/
 
 // Routes
 app.use('/', routes);
