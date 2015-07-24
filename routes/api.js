@@ -12,8 +12,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/items/:searchkey/:offset/:count', function(req, res, next) {
     var searchKey = req.params['searchkey'];
-    var offset = req.params['offset']
-    var count = req.params['count']
+    var offset = req.params['offset'];
+    var count = req.params['count'];
 
     // Fetch the data from the database
     db.Item
@@ -30,8 +30,35 @@ router.get('/items/:searchkey/:offset/:count', function(req, res, next) {
     })
 });
 
-router.get('/items/:id', function(req, res, next) {
-	// Return item of that id
+router.get('/items/:offset/:count', function(req, res, next) {
+    var offset = req.params['offset'];
+    var count = req.params['count'];
+
+    // Fetch the data from the database
+    db.Item
+    .find()
+    .sort({
+      title: 1
+    })
+    .limit(count) // TODO: offset
+    .exec(function(err, items) {
+      if (err) return next(err);
+      res.json(items)
+    })
+});
+
+router.get('/item/:id', function(req, res, next) {
+	var itemID = req.params['id']
+  // console.log('item')
+  // Get the item
+  db.Item
+  .findOne({
+    _id: itemID
+  })
+  .exec(function(err, item) {
+    if (err) return next(err);
+    res.json(item);
+  })
 });
 
 router.post('/item', function(req, res, next) {
