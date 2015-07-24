@@ -49,7 +49,7 @@ router.get('/items/:offset/:count', function(req, res, next) {
 
 router.get('/item/:id', function(req, res, next) {
 	var itemID = req.params['id']
-  // console.log('item')
+
   // Get the item
   db.Item
   .findOne({
@@ -71,8 +71,36 @@ router.post('/item', function(req, res, next) {
     })
 });
 
-router.post('/items/:id/:attribute', function(req, res, next) {
-    // Change item count attribute, 404 if invalid attribute
+router.post('/item/:id/update', function(req, res, next) {
+  var itemID = req.params['id']
+  var attribute = req.params['attribute']
+  var attributes = req.body
+
+  // Get the item
+  db.Item
+  .findById(itemID)
+  .exec(function(err, item) {
+    if (err) return next(err);
+
+    for (var attribute in attributes) {
+      // Get the attribute
+      var data = attributes[attribute]
+
+      // Check that the attribute exists
+      if (db.Item.schema.tree[attribute] == null) return next(Error('Invalid attribute \'' + attribute + '\'.'))
+
+      // Change the item
+      item[attribute] = data
+    }
+
+    // Save the item
+    item.save(function(err) {
+      if (err) return next(err);
+
+      // Return success
+      res.json(item)
+    })
+  })
 });
 
 router.delete('/items/:id', function(req, res, next) {
