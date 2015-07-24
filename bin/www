@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+var app = require('../app.js')
+
+// Run the server
+function getPort() {
+	// Grab the port
+  var port = parseInt(process.env.PORT || '3000')
+
+	// Validate the port
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+app.listen(getPort(), function() {
+	console.log('Listening.');
+})
