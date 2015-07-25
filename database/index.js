@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 module.exports.start = function() {
 	// Connect to the database
-	mongoose.connect('mongodb://localhost/test');
+	mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/HelloMongoose');
 
 	// Get the database
 	var db = mongoose.connection;
