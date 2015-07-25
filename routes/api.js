@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../database/index.js')
 
+// TODO: Validators to check all values are there when posted
+// TODO: Fetch data based on barcode id
+
 // Base API
 router.get('/', function(req, res, next) {
   res.send('This is the GrainTrack API.');
@@ -61,6 +64,16 @@ router.get('/item/:id', function(req, res, next) {
 });
 
 router.post('/item', function(req, res, next) {
+    // TODO: Find why this is an issue
+    // Temporary fix for 'nutrition[protein]': '5',
+    req.body['nutrition'] = { }
+    for (var index in req.body) {
+      var splice = index.split('[')
+      if (splice[0] == 'nutrition' && splice.length >= 2) {
+        req.body['nutrition'][splice[1].substr(0, splice[1].length - 1)] = req.body[index]
+      }
+    }
+
     // Make the new item
     var item = new db.Item(req.body)
 
@@ -72,9 +85,21 @@ router.post('/item', function(req, res, next) {
     })
 });
 
+router.post('/item/barcode/:barcode', function(req, res, next) {
+    /*// Make the new item
+    var item = new db.Item(req.body)
+
+    item.save(function(err) {
+      if (err) return next(err);
+
+      // Return the new object
+      res.json(item);
+    })*/
+    // TODO: This
+});
+
 router.post('/item/:id/update', function(req, res, next) {
   var itemID = req.params['id']
-  var attribute = req.params['attribute']
   var attributes = req.body
 
   // Get the item
@@ -89,6 +114,8 @@ router.post('/item/:id/update', function(req, res, next) {
 
       // Check that the attribute exists
       if (db.Item.schema.tree[attribute] == null) return next(Error('Invalid attribute \'' + attribute + '\'.'))
+
+      // TODO: Deal with objects here
 
       // Change the item
       item[attribute] = data
@@ -118,5 +145,7 @@ router.delete('/item/:id', function(req, res, next) {
     res.json({ success: true });
   })
 });
+
+
 
 module.exports = router;

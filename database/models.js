@@ -9,7 +9,16 @@ var itemSchema = mongoose.Schema({
 	'quantity': Number,
 	'barcode': Number,
 	'title': String,
-	'pack-count': Number
+	'pack-count': Number,
+
+	'nutrition': { // All in grams
+		'calories': Number,
+		'fat': Number,
+		'cholesterol': Number,
+		'sodium': Number,
+		'carbohydrates': Number,
+		'protein': Number
+	}
 });
 
 /* User */

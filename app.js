@@ -9,7 +9,6 @@ var bodyParser = require('body-parser');
 var db = require('./database/index.js')
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var api = require('./routes/api');
 
 var app = express();
@@ -37,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', routes);
-app.use('/users', users);
 app.use('/api', api);
 
 // Catch 404 and forward to error handler
@@ -55,6 +53,7 @@ if (app.get('env') === 'development') {
       message: err.message,
       error: err
     });
+    console.error(err);
   });
 }
 
@@ -65,6 +64,7 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+  console.error(err);
 });
 
 module.exports = app
