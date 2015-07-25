@@ -142,7 +142,7 @@ router.post('/item/barcode/:barcode', function(req, res, next) {
                                     'cholesterol': 0, // TODO: This
                                     'sodium': data.product.nutriments.sodium,
                                     'carbohydrates': data.product.nutriments.carbohydrates,
-                                    'proteins': data.product.nutriments.protein
+                                    'protein': data.product.nutriments.proteins
                                 }
                     	   })
 
