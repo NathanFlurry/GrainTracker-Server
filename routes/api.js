@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../database/index.js')
 
-// Constants
-var offset =
-
 // Base API
 router.get('/', function(req, res, next) {
   res.send('This is the GrainTrack API.');
@@ -23,6 +20,7 @@ router.get('/items/:searchkey/:offset/:count', function(req, res, next) {
     .sort({
       title: 1
     })
+    .skip(offset)
     .limit(count) // TODO: offset
     .exec(function(err, items) {
       if (err) return next(err);
@@ -40,6 +38,7 @@ router.get('/items/:offset/:count', function(req, res, next) {
     .sort({
       title: 1
     })
+    .skip(offset)
     .limit(count) // TODO: offset
     .exec(function(err, items) {
       if (err) return next(err);
@@ -52,11 +51,11 @@ router.get('/item/:id', function(req, res, next) {
 
   // Get the item
   db.Item
-  .findOne({
-    _id: itemID
-  })
+  .findById(itemID)
   .exec(function(err, item) {
     if (err) return next(err);
+
+    // Return the item
     res.json(item);
   })
 });
@@ -67,6 +66,8 @@ router.post('/item', function(req, res, next) {
 
     item.save(function(err) {
       if (err) return next(err);
+
+      // Return the new object
       res.json(item);
     })
 });
@@ -97,14 +98,25 @@ router.post('/item/:id/update', function(req, res, next) {
     item.save(function(err) {
       if (err) return next(err);
 
-      // Return success
+      // Return the new object
       res.json(item)
     })
   })
 });
 
-router.delete('/items/:id', function(req, res, next) {
-    // Delete item
+router.delete('/item/:id', function(req, res, next) {
+  var itemID = req.params['id']
+
+  // Delete item
+  db.Item
+  .findById(itemID)
+  .remove()
+  .exec(function(err, item) {
+    if (err) return next(err);
+
+    // Return success
+    res.json({ success: true });
+  })
 });
 
 module.exports = router;
