@@ -91,6 +91,12 @@ router.post('/item', function(req, res, next) {
   Tropicana - 5022313319513
   Lay's Classic Chips - 028400160148
   Dasani Water - 0049000027624
+  Fish sticks - 00989671
+  Milk - 074865756655
+  Chocolate milk - 0071962100350
+  Macaroni N' Cheese - 0018894360155
+  Oreo - 044000072742
+  Famous Amos Chocolate Chip - 076677100145
 */
 
 
